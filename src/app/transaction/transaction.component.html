@@ -1,0 +1,91 @@
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
+
+      <h3>My Bookmarks</h3>
+
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a *ngFor="let item of bookmarks" class="nav-link" [routerLink]="['/transaction', item]">{{item.substring(0,20)}}</a>
+        </li>
+      </ul>
+
+
+    </nav>
+
+    <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+
+
+      <section class="row text-center placeholders">
+        <div class="col-6 col-sm-3 placeholder">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{transaction}}" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail">
+
+
+        </div>
+        <div class="col-6 col-sm-4 placeholder">
+            <h4>{{transaction}}</h4>
+            <p class="text-muted">{{balance}} ETH</p>
+            <p class="text-muted">{{total}} Transactions</p>
+            <button class="btn btn-default" type="submit" (click) = "setBookmark()">
+               <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+               Add Bookmarks
+            </button>
+
+        </div>
+
+
+      </section>
+
+      <h2>Last Transactions</h2>
+
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#TxHash</th>
+              <th>Block</th>
+              <th>Age</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let trx of transactions">
+              <td>{{trx.hash.substring(0,10)}}</td>
+              <td>{{trx.blockNumber}}</td>
+              <td>{{toDate(trx.timeStamp) | amTimeAgo}}</td>
+
+              <td *ngIf="transaction == trx.from">
+                <span class="badge alert-success">{{trx.from}}</span>
+              </td>
+              <td *ngIf="transaction != trx.from">
+              <span class="badge  alert-info">
+                  <a [routerLink]="['/transaction', trx.from]">
+                    {{trx.from}}
+                  </a>
+              </span>
+              </td>
+
+              <td *ngIf="transaction == trx.to">
+                <span class="badge alert-success">
+                   {{trx.to}}
+                </span>
+              </td>
+              <td *ngIf="transaction != trx.to">
+                <span class="badge  alert-info">
+                    <a [routerLink]="['/transaction', trx.to]">
+                      {{trx.to}}
+                    </a>
+                </span>
+              </td>
+
+              <th>{{toValue(trx.value)}}</th>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
