@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-
+import { URLSearchParams, Jsonp } from '@angular/http';
 
 @Injectable()
 export class EtherscanService {
@@ -24,10 +24,11 @@ export class EtherscanService {
 
       return new Promise(resolve => {
 
+
           var url  = this.base
           url += "?module=account&action=txlist"
           url += "&address=" + address
-          url += "&startblock=0"
+          url += "&startblock=3344600"
           url += "&endblock=99999999"
           url += "&sort=desc"
           url += "&apikey=" + this.key

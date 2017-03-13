@@ -1,0 +1,15 @@
+<nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
+
+  <h3>My Bookmarks</h3>
+
+  <ul class="nav nav-pills flex-column">
+    <li class="nav-item" >
+         <a *ngFor="let item of bookmarks"   class="nav-link " [routerLink]="['/address', item]">
+           <span class="glyphicon glyphicon-remove" aria-hidden="true" (click) = "removeBookmark(item)"></span>
+           {{item.substring(0,20)}}
+         </a>
+    </li>
+  </ul>
+
+
+</nav>

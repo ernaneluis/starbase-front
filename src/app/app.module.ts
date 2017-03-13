@@ -2,19 +2,22 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { RouterModule, Routes } from '@angular/router';
+
+import {MomentModule} from 'angular2-moment';
+import { LocalStorageModule } from 'angular-2-local-storage';
 import { AlertModule } from 'ng2-bootstrap';
+
 import { AppComponent } from './app.component';
 
-import { RouterModule, Routes } from '@angular/router';
 import { EtherscanService } from './service/etherscan.service';
 import { EtherwebsocketService } from './service/etherwebsocket.service';
 import { TickerwebsocketService } from './service/tickerwebsocket.service';
+import { BookmarkService } from './service/bookmark.service';
 
-import {MomentModule} from 'angular2-moment';
 import { TransactionComponent } from './transaction/transaction.component';
 import { HomeComponent } from './home/home.component';
-
-import { LocalStorageModule } from 'angular-2-local-storage';
+import { BookmarkComponent } from './bookmark/bookmark.component';
 
 const appRoutes: Routes = [
   { path: '',      component: HomeComponent },
@@ -26,7 +29,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     TransactionComponent,
-    HomeComponent
+    HomeComponent,
+    BookmarkComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +44,7 @@ const appRoutes: Routes = [
        }),
     HttpModule
   ],
-  providers: [EtherscanService,EtherwebsocketService, TickerwebsocketService],
+  providers: [EtherscanService,EtherwebsocketService, TickerwebsocketService, BookmarkService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

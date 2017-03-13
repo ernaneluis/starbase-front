@@ -12,20 +12,9 @@ export class EtherwebsocketService {
 
   constructor()
   {
-
       this.ws = new $WebSocket(CHAT_URL);
-      // you can send immediately after connect,
-      // data will cached until connect open and immediately send or connect fail.
-
-      // when connect fail, websocket will reconnect or not,
-      // you can set {WebSocketConfig.reconnectIfNotNormalClose = true} to enable auto reconnect
-      // all cached data will lost when connect close if not reconnect
-
-      // set received message callback
-
       let seconds20 = 20000
       let ping  = setInterval(this.sendPing, seconds20, this.ws);
-
   }
 
   sendSubscribe(address)
@@ -36,13 +25,12 @@ export class EtherwebsocketService {
 
             this.ws.onMessage(
               (msg: MessageEvent)=> {
-                  console.log("onMessage ", msg.data);
+                  console.log("EtherScan Socket ", msg.data);
 
-                  if(msg.data.event == "txlist")
+                  let data = JSON.parse(msg.data)
+                  if(data.event == "txlist")
                   {
-                      // return msg.data["result"];
-                      observer.next(msg.data["result"]);
-                      observer.complete();
+                      observer.next(data["result"]);
                   }
               },
               {autoApply: false}
@@ -64,7 +52,6 @@ export class EtherwebsocketService {
           );
 
       });//end Observable
-      // })//end promise
 
   }
 

@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { EtherscanService } from '../service/etherscan.service';
 import { EtherwebsocketService } from '../service/etherwebsocket.service';
 import { TickerwebsocketService } from '../service/tickerwebsocket.service';
+import { BookmarkService } from '../service/bookmark.service';
 
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 
-import { LocalStorageService } from 'angular-2-local-storage';
+
 
 @Component({
   selector: 'app-transaction',
@@ -21,7 +22,7 @@ export class TransactionComponent implements OnInit
   address: any;
   balance: any;
   total: any;
-  bookmarks: any;
+
   private subscribe:any;
   isBookmarkSaved: any;
   priceUSD: any;
@@ -30,7 +31,7 @@ export class TransactionComponent implements OnInit
     private etherws: EtherwebsocketService,
     private tickerws: TickerwebsocketService,
     private route: ActivatedRoute,
-    private localStorageService: LocalStorageService) {
+    private bookmarkService: BookmarkService) {
 
   }
 
@@ -42,32 +43,32 @@ export class TransactionComponent implements OnInit
 
           this.address = params['id'];
 
+          //etherscan http request for transactions
           this.ether.getTransactionsFromAddress(this.address).then( (data) => {
-
             this.transactions = data
-            this.total = this.transactions.length
-
+            if(this.transactions != null)
+              this.total = this.transactions.length
           })
 
+          //etherscan http request for address balance
           this.ether.getBalanceFromAddress(this.address).then( (data) => {
             console.log("balance " + data)
             this.balance = data
           })
 
-          this.bookmarks = this.localStorageService.get("bookmarks");
-
-          this.isBookmarkSaved = this.bookmarkSaved(this.address)
-
+          //etherscan websocket for new transactions
           this.etherws.sendSubscribe(this.address).subscribe((data) => {
-            let array = [data]
+            let array = data
             this.transactions = array.concat(this.transactions)
           })
 
+          //tickerws websocket for ether price in usd
           this.tickerws.sendSubscribe(this.address).subscribe((data) => {
             this.priceUSD = data
-            // this.transactions = array.concat(this.transactions)
           })
-          // console.log(this.etherws)
+
+          //boolean value
+          this.isBookmarkSaved = this.bookmarkService.isBookmarkSaved(this.address)
 
       });
   }
@@ -86,7 +87,6 @@ export class TransactionComponent implements OnInit
 
   toUSD(value)
   {
-    // let strg =  Number(value)/(10**18)
     return value.toFixed(2)
   }
 
@@ -94,64 +94,16 @@ export class TransactionComponent implements OnInit
   setBookmark(trx)
   {
       console.log("save bookmark")
-
-      let book = <Array<any>> this.localStorageService.get("bookmarks");
-      //check if is the first time seting the bookmark key
-      if(book == null)
-      {
-        book = [trx]
-      }
-      else
-      {
-        // let trx = trx.toString()
-        //check if element exist already
-        let index = book.indexOf(trx)
-        //not found
-        if(index == -1)
-        {
-            //just add new bookmarks
-            book = book.concat(trx)
-        }
-
-
-      }
-
-      //save it
-      this.localStorageService.set("bookmarks", book);
-      //update the model view
-      this.bookmarks = book
-
-      this.isBookmarkSaved = this.bookmarkSaved(trx)
+      this.bookmarkService.setBookmark(trx)
+      this.isBookmarkSaved = this.bookmarkService.isBookmarkSaved(trx)
   }
 
   removeBookmark(trx)
   {
-    console.log("remove bookmark " + trx)
-    let book = <Array<any>> this.localStorageService.get("bookmarks");
-    let index = book.indexOf(trx)
-
-    if (index > -1) {
-      //found  element
-
-      //delete element
-      book.splice(index, 1);
-      //save it
-      this.localStorageService.set("bookmarks", book);
-      //update the model view
-      this.bookmarks = book
-
-      this.isBookmarkSaved = this.bookmarkSaved(trx)
-    }
-
+    console.log("remove Bookmark")
+    this.bookmarkService.removeBookmark(trx)
+    this.isBookmarkSaved = this.bookmarkService.isBookmarkSaved(trx)
   }
-
-  bookmarkSaved(trx)
-  {
-    let book = <Array<any>> this.localStorageService.get("bookmarks");
-    let index = book.indexOf(trx)
-    return (index == -1)? false : true ;
-  }
-
 
 
 

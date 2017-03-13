@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { EtherscanService } from './service/etherscan.service';
+// import { EtherscanService } from './service/etherscan.service';
+import { TickerwebsocketService } from './service/tickerwebsocket.service';
 
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,23 +12,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class AppComponent {
   address : any;
+  priceUSD = 0.00;
 
-  constructor(private ether: EtherscanService, private route: ActivatedRoute,private router: Router) {
-    // this.title = 'app works!';
-
-
+  constructor(private tickerws: TickerwebsocketService, private route: ActivatedRoute, private router: Router) {
 
   }
 
-  // Load data ones componet is ready
-  ngOnInit() {
+  ngOnInit()
+  {
+
+    //tickerws websocket for ether price in usd
+    this.tickerws.sendSubscribe(this.address).subscribe((data) => {
+      this.priceUSD = data
+    })
 
   }
 
   onSubmit(): void {
      // code that happens when form is submitted
-     // then reset the form
-    //  this.reset();
     this.router.navigate(['./address/'+this.address]);
     console.log(this.address)
  }

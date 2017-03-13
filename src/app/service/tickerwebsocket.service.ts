@@ -30,7 +30,6 @@ export class TickerwebsocketService {
 
   sendSubscribe(address)
   {
-    // return new Promise(resolve => {
 
     return Observable.create(observer => {
 
@@ -67,8 +66,7 @@ export class TickerwebsocketService {
               }
           );
 
-      });//end Observable
-      // })//end promise
+      });
 
   }
 
