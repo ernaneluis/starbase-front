@@ -6,7 +6,13 @@
 
       <ul class="nav nav-pills flex-column">
         <li class="nav-item">
-          <a *ngFor="let item of bookmarks" class="nav-link" [routerLink]="['/transaction', item]">{{item.substring(0,20)}}</a>
+
+             <a *ngFor="let item of bookmarks" class="nav-link " [routerLink]="['/address', item]">
+               <span class="glyphicon glyphicon-remove" aria-hidden="true" (click) = "removeBookmark(item)"></span>
+               {{item.substring(0,20)}}
+             </a>
+
+
         </li>
       </ul>
 
@@ -18,15 +24,22 @@
 
       <section class="row text-center placeholders">
         <div class="col-6 col-sm-3 placeholder">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{transaction}}" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{address}}" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail">
 
 
         </div>
         <div class="col-6 col-sm-4 placeholder">
-            <h4>{{transaction}}</h4>
-            <p class="text-muted">{{balance}} ETH</p>
+            <h4>{{address}}</h4>
+            <p class="text-muted">{{toEther(balance)}} ETH (${{ toUSD(toEther(balance)* priceUSD) }})</p>
             <p class="text-muted">{{total}} Transactions</p>
-            <button class="btn btn-default" type="submit" (click) = "setBookmark()">
+            <p class="text-muted">$ {{priceUSD}} </p>
+
+            <button *ngIf="isBookmarkSaved" class="btn btn-default" type="submit" (click) = "removeBookmark(address)">
+               <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+               Remove Bookmarks
+            </button>
+
+            <button *ngIf="!isBookmarkSaved" class="btn btn-default" type="submit" (click) = "setBookmark(address)">
                <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
                Add Bookmarks
             </button>
@@ -56,31 +69,31 @@
               <td>{{trx.blockNumber}}</td>
               <td>{{toDate(trx.timeStamp) | amTimeAgo}}</td>
 
-              <td *ngIf="transaction == trx.from">
+              <td *ngIf="address == trx.from">
                 <span class="badge alert-success">{{trx.from}}</span>
               </td>
-              <td *ngIf="transaction != trx.from">
+              <td *ngIf="address != trx.from">
               <span class="badge  alert-info">
-                  <a [routerLink]="['/transaction', trx.from]">
+                  <a [routerLink]="['/address', trx.from]">
                     {{trx.from}}
                   </a>
               </span>
               </td>
 
-              <td *ngIf="transaction == trx.to">
+              <td *ngIf="address == trx.to">
                 <span class="badge alert-success">
                    {{trx.to}}
                 </span>
               </td>
-              <td *ngIf="transaction != trx.to">
+              <td *ngIf="address != trx.to">
                 <span class="badge  alert-info">
-                    <a [routerLink]="['/transaction', trx.to]">
+                    <a [routerLink]="['/address', trx.to]">
                       {{trx.to}}
                     </a>
                 </span>
               </td>
 
-              <th>{{toValue(trx.value)}}</th>
+              <th>{{toEther(trx.value)}}  (${{ toUSD(toEther(balance)* priceUSD) }})</th>
             </tr>
 
           </tbody>

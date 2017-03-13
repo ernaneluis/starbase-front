@@ -7,6 +7,9 @@ import { AppComponent } from './app.component';
 
 import { RouterModule, Routes } from '@angular/router';
 import { EtherscanService } from './service/etherscan.service';
+import { EtherwebsocketService } from './service/etherwebsocket.service';
+import { TickerwebsocketService } from './service/tickerwebsocket.service';
+
 import {MomentModule} from 'angular2-moment';
 import { TransactionComponent } from './transaction/transaction.component';
 import { HomeComponent } from './home/home.component';
@@ -15,7 +18,7 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 
 const appRoutes: Routes = [
   { path: '',      component: HomeComponent },
-  { path: 'transaction/:id',      component: TransactionComponent }
+  { path: 'address/:id',      component: TransactionComponent }
 ];
 
 
@@ -37,7 +40,7 @@ const appRoutes: Routes = [
        }),
     HttpModule
   ],
-  providers: [EtherscanService],
+  providers: [EtherscanService,EtherwebsocketService, TickerwebsocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

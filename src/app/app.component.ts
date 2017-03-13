@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  transaction : any;
+  address : any;
 
   constructor(private ether: EtherscanService, private route: ActivatedRoute,private router: Router) {
     // this.title = 'app works!';
@@ -28,8 +28,8 @@ export class AppComponent {
      // code that happens when form is submitted
      // then reset the form
     //  this.reset();
-    this.router.navigate(['./transaction/'+this.transaction]);
-    console.log(this.transaction)
+    this.router.navigate(['./address/'+this.address]);
+    console.log(this.address)
  }
 
 
