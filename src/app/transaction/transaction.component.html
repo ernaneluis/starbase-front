@@ -13,9 +13,10 @@
 
         </div>
         <div class="col-6 col-sm-4 placeholder">
-            <h4>  <span class="badge  alert-success">{{address}} </<spa></spa>n> </h4>
+            <h4>  <span class="badge  alert-success">{{address}} </span> </h4>
             <p class="text-muted">{{toEther(balance)}} ETH (${{ toUSD(toEther(balance)* priceUSD) }})</p>
             <p class="text-muted">{{total}} Transactions</p>
+
 
             <button *ngIf="isBookmarkSaved" class="btn btn-default" type="submit" (click) = "removeBookmark(address)">
                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
