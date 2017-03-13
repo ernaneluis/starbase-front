@@ -28,9 +28,7 @@
     "core-js": "^2.4.1",
     "ng2-bootstrap": "^1.4.0",
     "rxjs": "^5.1.0",
-    "zone.js": "^0.7.6"
-  },
-  "devDependencies": {
+    "zone.js": "^0.7.6",
     "@angular/compiler-cli": "^2.4.0",
     "@types/jasmine": "2.5.38",
     "@types/node": "~6.0.60",
@@ -47,5 +45,11 @@
     "ts-node": "~2.0.0",
     "tslint": "~4.4.2",
     "typescript": "~2.0.0"
+  },
+  "devDependencies": {
+  },
+  "engines": {
+    "node": "7.2.0",
+    "npm": "4.0.5"
   }
 }
